@@ -34,7 +34,7 @@ function url($path, $absolute = false)
 {
     $dist_path = getBaseUrl($absolute);
     $directory = '/';
-    $file = basename($path);
+    $file = $path;
 
     return $dist_path . $directory . $file;
 }

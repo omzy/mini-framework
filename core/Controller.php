@@ -18,6 +18,17 @@ class Controller extends Base
         return;
     }
 
+    public function renderPartial($view, $params = [])
+    {
+        $file = $this->getViewFile($view);
+
+        if (file_exists($file)) {
+            require($file);
+        }
+
+        return;
+    }
+
     public function getViewPath()
     {
         return $this->getApplicationPath() . DIRECTORY_SEPARATOR . 'views';
