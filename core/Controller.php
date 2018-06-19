@@ -2,6 +2,8 @@
 
 namespace mini\core;
 
+use Base;
+
 class Controller
 {
     public $config;
