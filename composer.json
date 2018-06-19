@@ -1,5 +1,5 @@
 {
-    "name": "omzy83/mini",
+    "name": "omzy83/mini-framework",
     "description": "MINI PHP Framework",
     "type": "library",
     "require": {
