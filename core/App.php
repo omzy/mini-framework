@@ -2,10 +2,13 @@
 
 namespace mini\core;
 
-use Base;
+use Mini;
 
 class App
 {
+    public $base_path;
+    public $app_path;
+
     /** @var null The controller */
     private $url_controller = null;
 
@@ -17,10 +20,37 @@ class App
 
     public function __construct($config)
     {
-        Base::$app = $this;
+        Mini::$app = $this;
 
         $this->configure($this, $config);
-        $this->setupErrorReporting();
+        $this->setupApp($config);
+    }
+
+    public function setupApp($config)
+    {
+        $this->setBasePath($config['base_path']);
+        $this->setAppPath();
+        $this->setupErrorReporting($config['config']['app_debug']);
+    }
+
+    public function setBasePath($path)
+    {
+        $this->base_path = $path;
+    }
+
+    public function getBasePath()
+    {
+        return $this->base_path;
+    }
+
+    public function setAppPath()
+    {
+        $this->app_path = $this->getBasePath() . DIRECTORY_SEPARATOR . 'app';
+    }
+
+    public function getAppPath()
+    {
+        return $this->app_path;
     }
 
     public function configure($object, $properties)
@@ -32,9 +62,9 @@ class App
         return $object;
     }
 
-    public function setupErrorReporting()
+    public function setupErrorReporting($app_debug)
     {
-        if (Base::$app->config['app_debug'] == true) {
+        if ($app_debug == true) {
             ini_set('display_errors', 1);
             ini_set('display_startup_errors', 1);
             error_reporting(E_ALL);
@@ -54,7 +84,7 @@ class App
         if (!$this->url_controller) {
             $page = new \app\controllers\IndexController();
             $page->index();
-        } elseif (file_exists(APP . 'controllers/' . ucfirst($this->url_controller) . 'Controller.php')) {
+        } elseif (file_exists($this->getAppPath() . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . ucfirst($this->url_controller) . 'Controller.php')) {
             $controller = "\\app\\controllers\\" . ucfirst($this->url_controller) . 'Controller';
             $this->url_controller = new $controller();
 

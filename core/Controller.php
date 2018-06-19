@@ -2,29 +2,40 @@
 
 namespace mini\core;
 
-use Base;
+use Mini;
 
-class Controller
+class Controller extends Base
 {
-    public $config;
-    public $params;
-
-    public function __construct()
+    public function render($view, $params = [])
     {
-        $this->config = Base::$app->config;
-        $this->params = Base::$app->params;
-    }
+        $file = $this->getViewFile($view);
 
-    public function render($view, $viewData = null)
-    {
-        $config = $this->config;
-        $params = $this->params;
-
-        if (file_exists(APP . 'views/' . $view . '.php')) {
-            require(APP . 'views/layouts/main.php');
+        if (file_exists($file)) {
+            $content = $this->renderFile($file, $params);
+            require($this->getLayoutFile());
         }
 
         return;
+    }
+
+    public function getViewPath()
+    {
+        return $this->getApplicationPath() . DIRECTORY_SEPARATOR . 'views';
+    }
+
+    public function getViewFile($view)
+    {
+        return $this->getViewPath() . DIRECTORY_SEPARATOR . $view . '.php';
+    }
+
+    public function getLayoutPath()
+    {
+        return $this->getViewPath() . DIRECTORY_SEPARATOR . 'layouts';
+    }
+
+    public function getLayoutFile()
+    {
+        return $this->getLayoutPath() . DIRECTORY_SEPARATOR . 'main.php';
     }
 
     public function getRequestMethod()
