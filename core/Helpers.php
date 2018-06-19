@@ -1,7 +1,5 @@
 <?php
 
-use library\Asset;
-
 function asset_versioned($filename, $absolute = false)
 {
     $dist_path = getBaseUrl($absolute) . '/assets/';

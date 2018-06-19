@@ -1,8 +1,6 @@
 <?php
 
-namespace library;
-
-use Base;
+namespace mini\core;
 
 class App
 {

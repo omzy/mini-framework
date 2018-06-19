@@ -1,6 +1,6 @@
 <?php
 
-namespace library;
+namespace mini\core;
 
 /**
  * Get paths for assets
