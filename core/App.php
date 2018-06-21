@@ -23,11 +23,6 @@ class App
         Mini::$app = $this;
 
         $this->configure($this, $config);
-        $this->setupApp($config);
-    }
-
-    public function setupApp($config)
-    {
         $this->setBasePath($config['base_path']);
         $this->setAppPath();
         $this->setupErrorReporting($config['config']['app_debug']);
@@ -83,33 +78,60 @@ class App
         // check for controller: no controller given ? then load start-page
         if (!$this->url_controller) {
             $page = new \app\controllers\IndexController();
-            $page->index();
-        } elseif (file_exists($this->getAppPath() . DIRECTORY_SEPARATOR . 'controllers' . DIRECTORY_SEPARATOR . ucfirst($this->url_controller) . 'Controller.php')) {
-            $controller = "\\app\\controllers\\" . ucfirst($this->url_controller) . 'Controller';
-            $this->url_controller = new $controller();
+            $page->actionIndex();
+        }
+        elseif ($this->isValidControllerOrAction($this->url_controller)) {
+            $controller_name = str_replace(' ', '', ucwords(implode(' ', explode('-', $this->url_controller)))) . 'Controller';
+            $controller_class = "\\app\\controllers\\" . $controller_name;
 
-            // check for method: does such a method exist in the controller ?
-            if (method_exists($this->url_controller, $this->url_action) &&
-                is_callable(array($this->url_controller, $this->url_action))) {
+            if (class_exists($controller_class)) {
+                $controller = new \ReflectionClass($controller_class);
 
-                if (!empty($this->url_params)) {
-                    // Call the method and pass arguments to it
-                    call_user_func_array(array($this->url_controller, $this->url_action), $this->url_params);
-                } else {
-                    // If no parameters are given, just call the method without parameters, like $this->home->method();
-                    $this->url_controller->{$this->url_action}();
-                }
-            } else {
-                if (strlen($this->url_action) == 0) {
-                    // no action defined: call the default index() method of a selected controller
-                    $this->url_controller->index();
-                } else {
-                    $this->renderErrorResponse();
+                if ($controller->getShortName() == $controller_name) {
+                    $this->url_controller = new $controller_class();
+
+                    if ($this->isValidControllerOrAction($this->url_action)) {
+                        $method_name = 'action' . str_replace(' ', '', ucwords(implode(' ', explode('-', $this->url_action))));
+
+                        // check for method: does such a method exist in the controller ?
+                        if (method_exists($this->url_controller, $method_name)) {
+                            $method = new \ReflectionMethod($this->url_controller, $method_name);
+
+                            if ($method->getName() == $method_name) {
+                                $this->url_action = $method_name;
+
+                                if (!empty($this->url_params)) {
+                                    // Call the method and pass arguments to it
+                                    call_user_func_array(array($this->url_controller, $this->url_action), $this->url_params);
+                                }
+                                else {
+                                    // If no parameters are given, just call the method without parameters, like $this->home->method();
+                                    return $this->url_controller->{$this->url_action}();
+                                }
+                            }
+                        }
+                        elseif (strlen($this->url_action) == 0) {
+                            // no action defined: call the default index() method of a selected controller
+                            return $this->url_controller->actionIndex();
+                        }
+                    }
                 }
             }
-        } else {
-            $this->renderErrorResponse();
         }
+
+        return $this->renderErrorResponse();
+    }
+
+    /**
+     * Check if this is a valid controller or action
+     */
+    public function isValidControllerOrAction($value)
+    {
+        if (!empty($value)) {
+            return preg_match('%^[a-z][a-z0-9\\-_]*$%', $value);
+        }
+
+        return true;
     }
 
     /**
@@ -119,7 +141,7 @@ class App
     {
         http_response_code(404);
         $page = new \app\controllers\IndexController();
-        $page->error();
+        $page->actionError();
     }
 
     /**
