@@ -78,7 +78,7 @@ class App
         // check for controller: no controller given ? then load start-page
         if (!$this->url_controller) {
             $page = new \app\controllers\IndexController();
-            $page->actionIndex();
+            return $page->actionIndex();
         }
         elseif ($this->isValidControllerOrAction($this->url_controller)) {
             $controller_name = str_replace(' ', '', ucwords(implode(' ', explode('-', $this->url_controller)))) . 'Controller';
@@ -102,7 +102,7 @@ class App
 
                                 if (!empty($this->url_params)) {
                                     // Call the method and pass arguments to it
-                                    call_user_func_array(array($this->url_controller, $this->url_action), $this->url_params);
+                                    return call_user_func_array(array($this->url_controller, $this->url_action), $this->url_params);
                                 }
                                 else {
                                     // If no parameters are given, just call the method without parameters, like $this->home->method();
@@ -141,7 +141,7 @@ class App
     {
         http_response_code(404);
         $page = new \app\controllers\IndexController();
-        $page->actionError();
+        return $page->actionError();
     }
 
     /**
