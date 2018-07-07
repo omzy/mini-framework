@@ -9,14 +9,13 @@ class App
     public $base_path;
     public $app_path;
 
-    /** @var null The controller */
-    private $url_controller = null;
+    public $url_controller = null;
+    public $url_action = null;
+    public $url_params = [];
+    public $url_route = null;
 
-    /** @var null The method (of the above controller), often also named "action" */
-    private $url_action = null;
-
-    /** @var array URL parameters */
-    private $url_params = array();
+    public $controller;
+    public $action;
 
     public function __construct($config)
     {
@@ -88,31 +87,31 @@ class App
                 $controller = new \ReflectionClass($controller_class);
 
                 if ($controller->getShortName() == $controller_name) {
-                    $this->url_controller = new $controller_class();
+                    $this->controller = new $controller_class();
 
                     if ($this->isValidControllerOrAction($this->url_action)) {
                         $method_name = 'action' . str_replace(' ', '', ucwords(implode(' ', explode('-', $this->url_action))));
 
                         // check for method: does such a method exist in the controller ?
-                        if (method_exists($this->url_controller, $method_name)) {
-                            $method = new \ReflectionMethod($this->url_controller, $method_name);
+                        if (method_exists($this->controller, $method_name)) {
+                            $method = new \ReflectionMethod($this->controller, $method_name);
 
                             if ($method->getName() == $method_name) {
-                                $this->url_action = $method_name;
+                                $this->action = $method_name;
 
                                 if (!empty($this->url_params)) {
                                     // Call the method and pass arguments to it
-                                    return call_user_func_array(array($this->url_controller, $this->url_action), $this->url_params);
+                                    return call_user_func_array([$this->controller, $this->action], $this->url_params);
                                 }
                                 else {
                                     // If no parameters are given, just call the method without parameters, like $this->home->method();
-                                    return $this->url_controller->{$this->url_action}();
+                                    return $this->controller->{$this->action}();
                                 }
                             }
                         }
                         elseif (strlen($this->url_action) == 0) {
                             // no action defined: call the default index() method of a selected controller
-                            return $this->url_controller->actionIndex();
+                            return $this->controller->actionIndex();
                         }
                     }
                 }
@@ -152,18 +151,18 @@ class App
         if (isset($_GET['url'])) {
             // split URL
             $url = trim($_GET['url'], '/');
-            $url = filter_var($url, FILTER_SANITIZE_URL);
-            $url = explode('/', $url);
+            $this->url_route = filter_var($url, FILTER_SANITIZE_URL);
+            $url_parts = explode('/', $this->url_route);
 
             // Put URL parts into according properties
-            $this->url_controller = isset($url[0]) ? $url[0] : null;
-            $this->url_action = isset($url[1]) ? $url[1] : null;
+            $this->url_controller = $url_parts[0] ?? null;
+            $this->url_action = $url_parts[1] ?? null;
 
             // Remove controller and action from the split URL
-            unset($url[0], $url[1]);
+            unset($url_parts[0], $url_parts[1]);
 
             // Rebase array keys and store the URL params
-            $this->url_params = array_values($url);
+            $this->url_params = array_values($url_parts);
 
             // for debugging. uncomment this if you have problems with the URL
             //echo 'Controller: ' . $this->url_controller . '<br>';
