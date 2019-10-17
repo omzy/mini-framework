@@ -24,7 +24,7 @@ class App
         $this->configure($this, $config);
         $this->setBasePath($config['base_path']);
         $this->setAppPath();
-        $this->setupErrorReporting($config['config']['app_debug']);
+        $this->setupErrorReporting($config['app_debug']);
     }
 
     public function setBasePath($path)
