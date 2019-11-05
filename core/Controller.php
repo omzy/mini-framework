@@ -23,7 +23,7 @@ class Controller extends Base
         $file = $this->getViewFile($view);
 
         if (file_exists($file)) {
-            require($file);
+            return $this->renderFile($file, $params);
         }
 
         return;
