@@ -12,7 +12,7 @@ class Controller extends Base
 
         if (file_exists($file)) {
             $content = $this->renderFile($file, $params);
-            require($this->getLayoutFile());
+            echo $this->renderFile($this->getLayoutFile(), ['content' => $content]);
         }
 
         return;
