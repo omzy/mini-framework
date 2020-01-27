@@ -16,29 +16,23 @@ class Base
         return Mini::$app->app_path;
     }
 
-    public function renderFile($file, $params = [])
+    public function getViewPath()
     {
-        $_obInitialLevel_ = ob_get_level();
-        ob_start();
-        ob_implicit_flush(false);
-        extract($params, EXTR_OVERWRITE);
-        try {
-            require $file;
-            return ob_get_clean();
-        } catch (\Exception $e) {
-            while (ob_get_level() > $_obInitialLevel_) {
-                if (!@ob_end_clean()) {
-                    ob_clean();
-                }
-            }
-            throw $e;
-        } catch (\Throwable $e) {
-            while (ob_get_level() > $_obInitialLevel_) {
-                if (!@ob_end_clean()) {
-                    ob_clean();
-                }
-            }
-            throw $e;
-        }
+        return $this->getApplicationPath() . DIRECTORY_SEPARATOR . 'views';
+    }
+
+    public function getViewFile($view)
+    {
+        return $this->getViewPath() . DIRECTORY_SEPARATOR . $view . '.php';
+    }
+
+    public function getLayoutPath()
+    {
+        return $this->getViewPath() . DIRECTORY_SEPARATOR . 'layouts';
+    }
+
+    public function getLayoutFile()
+    {
+        return $this->getLayoutPath() . DIRECTORY_SEPARATOR . 'main.php';
     }
 }

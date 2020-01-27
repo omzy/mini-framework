@@ -8,45 +8,12 @@ class Controller extends Base
 {
     public function render($view, $params = [])
     {
-        $file = $this->getViewFile($view);
-
-        if (file_exists($file)) {
-            $content = $this->renderFile($file, $params);
-            echo $this->renderFile($this->getLayoutFile(), ['content' => $content]);
-        }
-
-        return;
+        return Mini::$app->view->render($view, $params);
     }
 
     public function renderPartial($view, $params = [])
     {
-        $file = $this->getViewFile($view);
-
-        if (file_exists($file)) {
-            return $this->renderFile($file, $params);
-        }
-
-        return;
-    }
-
-    public function getViewPath()
-    {
-        return $this->getApplicationPath() . DIRECTORY_SEPARATOR . 'views';
-    }
-
-    public function getViewFile($view)
-    {
-        return $this->getViewPath() . DIRECTORY_SEPARATOR . $view . '.php';
-    }
-
-    public function getLayoutPath()
-    {
-        return $this->getViewPath() . DIRECTORY_SEPARATOR . 'layouts';
-    }
-
-    public function getLayoutFile()
-    {
-        return $this->getLayoutPath() . DIRECTORY_SEPARATOR . 'main.php';
+        return Mini::$app->view->renderPartial($view, $params);
     }
 
     public function getRequestMethod()

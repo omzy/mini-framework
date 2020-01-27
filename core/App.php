@@ -53,6 +53,8 @@ class App
             $object->$name = $value;
         }
 
+        $object->view = new View();
+
         return $object;
     }
 
