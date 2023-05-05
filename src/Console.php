@@ -60,11 +60,11 @@ class Console
     }
 
     /**
-     * @param object $object
+     * @param Console $object $object
      * @param array $properties
      * @return object
      */
-    public function configure(object $object, array $properties): object
+    public function configure(self $object, array $properties): object
     {
         foreach ($properties as $name => $value) {
             $object->$name = $value;

@@ -14,6 +14,7 @@ class App
 
     public $controller;
     public $action;
+    public $view;
 
     /**
      * @param array $config
@@ -62,11 +63,11 @@ class App
     }
 
     /**
-     * @param object $object
+     * @param App $object $object
      * @param array $properties
      * @return object
      */
-    public function configure(object $object, array $properties): object
+    public function configure(self $object, array $properties): object
     {
         foreach ($properties as $name => $value) {
             $object->$name = $value;
@@ -180,8 +181,8 @@ class App
             $url_parts = explode('/', $this->url_route);
 
             // Put URL parts into according properties
-            $this->url_controller = $url_parts[0] ?? null;
-            $this->url_action = $url_parts[1] ?? null;
+            $this->url_controller = $url_parts[0] ?? '';
+            $this->url_action = $url_parts[1] ?? '';
 
             // Remove controller and action from the split URL
             unset($url_parts[0], $url_parts[1]);

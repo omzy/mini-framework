@@ -7,6 +7,10 @@ use Throwable;
 
 class View extends Base
 {
+    public $title;
+    public $description;
+    public $pageClass;
+
     /**
      * @param string $view
      * @param array $params
