@@ -1,8 +1,6 @@
 <?php
 
-namespace mini\core;
-
-use Mini;
+namespace Mini;
 
 class Console
 {
@@ -15,7 +13,10 @@ class Console
     public $controller;
     public $action;
 
-    public function __construct($config)
+    /**
+     * @param array $config
+     */
+    public function __construct(array $config)
     {
         Mini::$app = $this;
 
@@ -25,27 +26,45 @@ class Console
         $this->setupErrorReporting($config['app_debug']);
     }
 
-    public function setBasePath($path)
+    /**
+     * @param string $path
+     * @return void
+     */
+    public function setBasePath(string $path)
     {
         $this->base_path = $path;
     }
 
+    /**
+     * @return mixed
+     */
     public function getBasePath()
     {
         return $this->base_path;
     }
 
+    /**
+     * @return void
+     */
     public function setAppPath()
     {
         $this->app_path = $this->getBasePath() . DIRECTORY_SEPARATOR . 'app';
     }
 
+    /**
+     * @return mixed
+     */
     public function getAppPath()
     {
         return $this->app_path;
     }
 
-    public function configure($object, $properties)
+    /**
+     * @param object $object
+     * @param array $properties
+     * @return object
+     */
+    public function configure(object $object, array $properties): object
     {
         foreach ($properties as $name => $value) {
             $object->$name = $value;
@@ -54,15 +73,22 @@ class Console
         return $object;
     }
 
-    public function setupErrorReporting($app_debug)
+    /**
+     * @param bool $app_debug
+     * @return void
+     */
+    public function setupErrorReporting(bool $app_debug)
     {
-        if ($app_debug == true) {
+        if ($app_debug) {
             ini_set('display_errors', 1);
             ini_set('display_startup_errors', 1);
             error_reporting(E_ALL);
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function run()
     {
         $this->splitUrl();
@@ -77,6 +103,9 @@ class Console
         return $this->controller->{$this->action}();
     }
 
+    /**
+     * @return void
+     */
     private function splitUrl()
     {
         global $argc, $argv;
@@ -85,8 +114,7 @@ class Console
             if (isset($argv[1])) {
                 $this->url_action = $argv[1] ?? null;
             }
-        }
-        else {
+        } else {
             echo "argc and argv disabled\n";
         }
     }

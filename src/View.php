@@ -1,12 +1,19 @@
 <?php
 
-namespace mini\core;
+namespace Mini;
 
-use Mini;
+use Exception;
+use Throwable;
 
 class View extends Base
 {
-    public function render($view, $params = [])
+    /**
+     * @param string $view
+     * @param array $params
+     * @return void
+     * @throws Throwable
+     */
+    public function render(string $view, array $params = [])
     {
         $file = $this->getViewFile($view);
 
@@ -18,7 +25,13 @@ class View extends Base
         return;
     }
 
-    public function renderPartial($view, $params = [])
+    /**
+     * @param string $view
+     * @param array $params
+     * @return false|string|void
+     * @throws Throwable
+     */
+    public function renderPartial(string $view, array $params = [])
     {
         $file = $this->getViewFile($view);
 
@@ -29,7 +42,12 @@ class View extends Base
         return;
     }
 
-    public function renderFile($file, $params = [])
+    /**
+     * @param string $file
+     * @param array $params
+     * @return false|string
+     */
+    public function renderFile(string $file, array $params = [])
     {
         $_obInitialLevel_ = ob_get_level();
         ob_start();
@@ -38,14 +56,7 @@ class View extends Base
         try {
             require $file;
             return ob_get_clean();
-        } catch (\Exception $e) {
-            while (ob_get_level() > $_obInitialLevel_) {
-                if (!@ob_end_clean()) {
-                    ob_clean();
-                }
-            }
-            throw $e;
-        } catch (\Throwable $e) {
+        } catch (Exception|Throwable $e) {
             while (ob_get_level() > $_obInitialLevel_) {
                 if (!@ob_end_clean()) {
                     ob_clean();

@@ -1,6 +1,6 @@
 <?php
 
-namespace mini\core;
+namespace Mini;
 
 /**
  * Get paths for assets
@@ -9,7 +9,10 @@ class Asset
 {
     private $manifest;
 
-    public function __construct($manifest_path)
+    /**
+     * @param string $manifest_path
+     */
+    public function __construct(string $manifest_path)
     {
         if (file_exists($manifest_path)) {
             $this->manifest = json_decode(file_get_contents($manifest_path), true);
@@ -18,12 +21,20 @@ class Asset
         }
     }
 
+    /**
+     * @return array|mixed
+     */
     public function get()
     {
         return $this->manifest;
     }
 
-    public function getPath($key = '', $default = null)
+    /**
+     * @param string $key
+     * @param $default
+     * @return array|mixed|null
+     */
+    public function getPath(string $key = '', $default = null)
     {
         $collection = $this->manifest;
         if (is_null($key)) {

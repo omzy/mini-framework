@@ -1,8 +1,6 @@
 <?php
 
-namespace mini\core;
-
-use Mini;
+namespace Mini;
 
 class App
 {
@@ -17,7 +15,10 @@ class App
     public $controller;
     public $action;
 
-    public function __construct($config)
+    /**
+     * @param array $config
+     */
+    public function __construct(array $config)
     {
         Mini::$app = $this;
 
@@ -27,27 +28,45 @@ class App
         $this->setupErrorReporting($config['app_debug']);
     }
 
-    public function setBasePath($path)
+    /**
+     * @param string $path
+     * @return void
+     */
+    public function setBasePath(string $path)
     {
         $this->base_path = $path;
     }
 
+    /**
+     * @return mixed
+     */
     public function getBasePath()
     {
         return $this->base_path;
     }
 
+    /**
+     * @return void
+     */
     public function setAppPath()
     {
         $this->app_path = $this->getBasePath() . DIRECTORY_SEPARATOR . 'app';
     }
 
+    /**
+     * @return mixed
+     */
     public function getAppPath()
     {
         return $this->app_path;
     }
 
-    public function configure($object, $properties)
+    /**
+     * @param object $object
+     * @param array $properties
+     * @return object
+     */
+    public function configure(object $object, array $properties): object
     {
         foreach ($properties as $name => $value) {
             $object->$name = $value;
@@ -58,9 +77,13 @@ class App
         return $object;
     }
 
-    public function setupErrorReporting($app_debug)
+    /**
+     * @param bool $app_debug
+     * @return void
+     */
+    public function setupErrorReporting(bool $app_debug)
     {
-        if ($app_debug == true) {
+        if ($app_debug) {
             ini_set('display_errors', 1);
             ini_set('display_startup_errors', 1);
             error_reporting(E_ALL);
@@ -68,8 +91,7 @@ class App
     }
 
     /**
-     * "Start" the application:
-     * Analyze the URL elements and calls the according controller/method or the fallback
+     * @return mixed
      */
     public function run()
     {
@@ -124,7 +146,8 @@ class App
     }
 
     /**
-     * Check if this is a valid controller or action
+     * @param $value
+     * @return bool|int
      */
     public function isValidControllerOrAction($value)
     {
@@ -136,7 +159,7 @@ class App
     }
 
     /**
-     * Render an error response
+     * @return mixed
      */
     public function renderErrorResponse()
     {
@@ -146,7 +169,7 @@ class App
     }
 
     /**
-     * Get and split the URL
+     * @return void
      */
     private function splitUrl()
     {

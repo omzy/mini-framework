@@ -1,8 +1,13 @@
 <?php
 
-use mini\core\Asset;
+use Mini\Asset;
 
-function asset_versioned($filename, $absolute = false)
+/**
+ * @param string $filename
+ * @param bool $absolute
+ * @return string
+ */
+function asset_versioned(string $filename, bool $absolute = false): string
 {
     $dist_path = getBaseUrl($absolute) . '/assets/';
     $directory = dirname($filename) . '/';
@@ -21,7 +26,12 @@ function asset_versioned($filename, $absolute = false)
     }
 }
 
-function asset($filename, $absolute = false)
+/**
+ * @param string $filename
+ * @param bool $absolute
+ * @return string
+ */
+function asset(string $filename, bool $absolute = false): string
 {
     $dist_path = getBaseUrl($absolute) . '/assets/';
     $directory = dirname($filename) . '/';
@@ -30,7 +40,12 @@ function asset($filename, $absolute = false)
     return $dist_path . $directory . $file;
 }
 
-function url($path, $absolute = false)
+/**
+ * @param string $path
+ * @param bool $absolute
+ * @return string
+ */
+function url(string $path, bool $absolute = false): string
 {
     $dist_path = getBaseUrl($absolute);
     $directory = '/';
@@ -39,29 +54,39 @@ function url($path, $absolute = false)
     return $dist_path . $directory . $file;
 }
 
-function getBaseUrl($absolute = false)
+/**
+ * @param bool $absolute
+ * @return string|null
+ */
+function getBaseUrl(bool $absolute = false): ?string
 {
     $server = $_SERVER;
 
     $protocol = $server['REQUEST_SCHEME'];
-    $seperator = '://';
+    $separator = '://';
     $hostname = $server['SERVER_NAME'];
     $directory = dirname($server['PHP_SELF']);
 
-    if ($absolute == true) {
-        return $protocol . $seperator . $hostname . ($directory != '/' ? $directory : null);
+    if ($absolute) {
+        return $protocol . $separator . $hostname . ($directory != '/' ? $directory : null);
     } else {
         return $directory != '/' ? $directory : null;
     }
 }
 
-function getBasePath()
+/**
+ * @return string
+ */
+function getBasePath(): string
 {
     $server = $_SERVER;
 
     return $server['DOCUMENT_ROOT'] . dirname($server['PHP_SELF']);
 }
 
+/**
+ * @return false|mixed|string
+ */
 function getRequestPath()
 {
     $server = $_SERVER;

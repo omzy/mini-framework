@@ -3,14 +3,15 @@
     "description": "MINI PHP Framework",
     "type": "library",
     "require": {
-        "php": ">=5.4.0"
+        "php": "^7.4|^8.0",
+        "ext-json": "*"
     },
     "autoload": {
         "files": [
-            "core/Helpers.php"
+            "src/Helpers.php"
         ],
         "psr-4": {
-            "mini\\": ""
+            "Mini\\": "src/"
         }
     }
 }
