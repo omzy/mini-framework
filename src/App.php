@@ -4,17 +4,22 @@ namespace Mini;
 
 class App
 {
-    public $base_path;
-    public $app_path;
+    public string $base_path;
+    public string $app_path;
 
-    public $url_controller = null;
-    public $url_action = null;
-    public $url_params = [];
-    public $url_route = null;
+    public ?string $url_controller = null;
+    public ?string $url_action = null;
+    public array $url_params = [];
+    public ?string $url_route = null;
 
-    public $controller;
-    public $action;
-    public $view;
+    public Controller $controller;
+    public string $action;
+    public View $view;
+
+    public string $app_env;
+    public bool $app_debug;
+    public array $params;
+    public array $mailer;
 
     /**
      * @param array $config
@@ -39,9 +44,9 @@ class App
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getBasePath()
+    public function getBasePath(): string
     {
         return $this->base_path;
     }
@@ -55,9 +60,9 @@ class App
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getAppPath()
+    public function getAppPath(): string
     {
         return $this->app_path;
     }
