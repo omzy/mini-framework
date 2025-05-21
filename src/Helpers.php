@@ -2,11 +2,6 @@
 
 use Mini\Asset;
 
-/**
- * @param string $filename
- * @param bool $absolute
- * @return string
- */
 function asset_versioned(string $filename, bool $absolute = false): string
 {
     $dist_path = getBaseUrl($absolute) . '/assets/';
@@ -26,11 +21,6 @@ function asset_versioned(string $filename, bool $absolute = false): string
     }
 }
 
-/**
- * @param string $filename
- * @param bool $absolute
- * @return string
- */
 function asset(string $filename, bool $absolute = false): string
 {
     $dist_path = getBaseUrl($absolute) . '/assets/';
@@ -40,11 +30,6 @@ function asset(string $filename, bool $absolute = false): string
     return $dist_path . $directory . $file;
 }
 
-/**
- * @param string $path
- * @param bool $absolute
- * @return string
- */
 function url(string $path, bool $absolute = false): string
 {
     $dist_path = getBaseUrl($absolute);
@@ -54,10 +39,6 @@ function url(string $path, bool $absolute = false): string
     return $dist_path . $directory . $file;
 }
 
-/**
- * @param bool $absolute
- * @return string|null
- */
 function getBaseUrl(bool $absolute = false): ?string
 {
     $server = $_SERVER;
@@ -74,9 +55,6 @@ function getBaseUrl(bool $absolute = false): ?string
     }
 }
 
-/**
- * @return string
- */
 function getBasePath(): string
 {
     $server = $_SERVER;
@@ -84,10 +62,7 @@ function getBasePath(): string
     return $server['DOCUMENT_ROOT'] . dirname($server['PHP_SELF']);
 }
 
-/**
- * @return false|mixed|string
- */
-function getRequestPath()
+function getRequestPath(): false|string
 {
     $server = $_SERVER;
 

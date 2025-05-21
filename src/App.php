@@ -21,9 +21,6 @@ class App
     public array $params;
     public array $mailer;
 
-    /**
-     * @param array $config
-     */
     public function __construct(array $config)
     {
         Mini::$app = $this;
@@ -34,44 +31,26 @@ class App
         $this->setupErrorReporting($config['app_debug']);
     }
 
-    /**
-     * @param string $path
-     * @return void
-     */
-    public function setBasePath(string $path)
+    public function setBasePath(string $path): void
     {
         $this->base_path = $path;
     }
 
-    /**
-     * @return string
-     */
     public function getBasePath(): string
     {
         return $this->base_path;
     }
 
-    /**
-     * @return void
-     */
-    public function setAppPath()
+    public function setAppPath(): void
     {
         $this->app_path = $this->getBasePath() . DIRECTORY_SEPARATOR . 'app';
     }
 
-    /**
-     * @return string
-     */
     public function getAppPath(): string
     {
         return $this->app_path;
     }
 
-    /**
-     * @param App $object $object
-     * @param array $properties
-     * @return object
-     */
     public function configure(self $object, array $properties): object
     {
         foreach ($properties as $name => $value) {
@@ -83,11 +62,7 @@ class App
         return $object;
     }
 
-    /**
-     * @param bool $app_debug
-     * @return void
-     */
-    public function setupErrorReporting(bool $app_debug)
+    public function setupErrorReporting(bool $app_debug): void
     {
         if ($app_debug) {
             ini_set('display_errors', 1);
@@ -96,9 +71,6 @@ class App
         }
     }
 
-    /**
-     * @return mixed
-     */
     public function run()
     {
         // create array with URL parts in $url
@@ -151,11 +123,7 @@ class App
         return $this->renderErrorResponse();
     }
 
-    /**
-     * @param $value
-     * @return bool|int
-     */
-    public function isValidControllerOrAction($value)
+    public function isValidControllerOrAction($value): bool|int
     {
         if (!empty($value)) {
             return preg_match('%^[a-z][a-z0-9\\-_]*$%', $value);
@@ -164,9 +132,6 @@ class App
         return true;
     }
 
-    /**
-     * @return mixed
-     */
     public function renderErrorResponse()
     {
         http_response_code(404);
@@ -174,10 +139,7 @@ class App
         return $page->actionError();
     }
 
-    /**
-     * @return void
-     */
-    private function splitUrl()
+    private function splitUrl(): void
     {
         if (isset($_GET['url'])) {
             // split URL

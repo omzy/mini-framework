@@ -7,7 +7,7 @@ namespace Mini;
  */
 class Asset
 {
-    private $manifest;
+    private array $manifest;
 
     /**
      * @param string $manifest_path
@@ -21,20 +21,12 @@ class Asset
         }
     }
 
-    /**
-     * @return array|mixed
-     */
     public function get()
     {
         return $this->manifest;
     }
 
-    /**
-     * @param string $key
-     * @param $default
-     * @return array|mixed|null
-     */
-    public function getPath(string $key = '', $default = null)
+    public function getPath(string $key = '', mixed $default = null)
     {
         $collection = $this->manifest;
         if (is_null($key)) {

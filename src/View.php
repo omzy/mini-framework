@@ -12,12 +12,9 @@ class View extends Base
     public $pageClass;
 
     /**
-     * @param string $view
-     * @param array $params
-     * @return void
      * @throws Throwable
      */
-    public function render(string $view, array $params = [])
+    public function render(string $view, array $params = []): null
     {
         $file = $this->getViewFile($view);
 
@@ -26,16 +23,13 @@ class View extends Base
             echo $this->renderFile($this->getLayoutFile(), ['content' => $content]);
         }
 
-        return;
+        return null;
     }
 
     /**
-     * @param string $view
-     * @param array $params
-     * @return false|string|void
      * @throws Throwable
      */
-    public function renderPartial(string $view, array $params = [])
+    public function renderPartial(string $view, array $params = []): false|string|null
     {
         $file = $this->getViewFile($view);
 
@@ -43,15 +37,10 @@ class View extends Base
             return $this->renderFile($file, $params);
         }
 
-        return;
+        return null;
     }
 
-    /**
-     * @param string $file
-     * @param array $params
-     * @return false|string
-     */
-    public function renderFile(string $file, array $params = [])
+    public function renderFile(string $file, array $params = []): false|string
     {
         $_obInitialLevel_ = ob_get_level();
         ob_start();

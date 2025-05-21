@@ -26,44 +26,26 @@ class Console
         $this->setupErrorReporting($config['app_debug']);
     }
 
-    /**
-     * @param string $path
-     * @return void
-     */
-    public function setBasePath(string $path)
+    public function setBasePath(string $path): void
     {
         $this->base_path = $path;
     }
 
-    /**
-     * @return mixed
-     */
     public function getBasePath()
     {
         return $this->base_path;
     }
 
-    /**
-     * @return void
-     */
-    public function setAppPath()
+    public function setAppPath(): void
     {
         $this->app_path = $this->getBasePath() . DIRECTORY_SEPARATOR . 'app';
     }
 
-    /**
-     * @return mixed
-     */
     public function getAppPath()
     {
         return $this->app_path;
     }
 
-    /**
-     * @param Console $object $object
-     * @param array $properties
-     * @return object
-     */
     public function configure(self $object, array $properties): object
     {
         foreach ($properties as $name => $value) {
@@ -73,11 +55,7 @@ class Console
         return $object;
     }
 
-    /**
-     * @param bool $app_debug
-     * @return void
-     */
-    public function setupErrorReporting(bool $app_debug)
+    public function setupErrorReporting(bool $app_debug): void
     {
         if ($app_debug) {
             ini_set('display_errors', 1);
@@ -86,9 +64,6 @@ class Console
         }
     }
 
-    /**
-     * @return mixed
-     */
     public function run()
     {
         $this->splitUrl();
@@ -103,10 +78,7 @@ class Console
         return $this->controller->{$this->action}();
     }
 
-    /**
-     * @return void
-     */
-    private function splitUrl()
+    private function splitUrl(): void
     {
         global $argc, $argv;
 
