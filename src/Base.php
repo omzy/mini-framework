@@ -4,12 +4,12 @@ namespace Mini;
 
 class Base
 {
-    public function getBasePath()
+    public function getBasePath(): string
     {
         return Mini::$app->base_path;
     }
 
-    public function getApplicationPath()
+    public function getApplicationPath(): string
     {
         return Mini::$app->app_path;
     }

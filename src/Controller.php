@@ -2,14 +2,22 @@
 
 namespace Mini;
 
+use Throwable;
+
 class Controller extends Base
 {
-    public function render(string $view, array $params = [])
+    /**
+     * @throws Throwable
+     */
+    public function render(string $view, array $params = []): null
     {
         return Mini::$app->view->render($view, $params);
     }
 
-    public function renderPartial(string $view, array $params = [])
+    /**
+     * @throws Throwable
+     */
+    public function renderPartial(string $view, array $params = []): false|string|null
     {
         return Mini::$app->view->renderPartial($view, $params);
     }
